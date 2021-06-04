@@ -16,4 +16,4 @@ class Person:
 
 
 p = Person()
-print(p.name)
+print(p.report())
