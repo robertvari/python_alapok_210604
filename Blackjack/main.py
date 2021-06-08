@@ -1,11 +1,14 @@
-from game_assets.assets import HumanPlayer, AIPlayer
+from game_assets.assets import HumanPlayer, AIPlayer, Deck
 
 
 class Blackjack:
     def __init__(self):
         self._intro()
 
-        self.human_player = HumanPlayer()
+        self._deck = Deck()
+
+        self.AI_Player = AIPlayer()
+        self.Human_Player = HumanPlayer()
 
 
     @staticmethod

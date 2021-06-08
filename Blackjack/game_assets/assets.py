@@ -2,7 +2,14 @@ import random
 
 
 class PlayerBase:
-    pass
+    def __init__(self):
+        self._name = None
+        self._credits = random.randint(100, 1000)
+        self._hand = []
+        self.in_game = True
+
+    def create(self):
+        self._name = "..."
 
 
 class HumanPlayer(PlayerBase):
