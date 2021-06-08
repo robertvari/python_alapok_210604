@@ -18,7 +18,7 @@ class PlayerBase:
     def draw_cards(self, deck):
         while self.in_game:
             # check hand value
-            hand_value = self._count_hand()
+            hand_value = self.count_hand()
 
             if hand_value > 16:
                 self.in_game = False
@@ -27,14 +27,18 @@ class PlayerBase:
                 new_card = deck.give_card()
                 self._hand.append(new_card)
 
-    def _count_hand(self):
+    def count_hand(self):
         return sum([card.value for card in self._hand])
 
-    def show_hand(self):
-        print(f"Hand value: {self._count_hand()}. Cards: {self._hand}")
+    def give_bet(self, value):
+        self._credits -= value
+        return value
 
-    def __str__(self):
-        return f"Name: {self._name}\nCredits: {self._credits}"
+    def set_credits(self, value):
+        self._credits += value
+
+    def show_hand(self):
+        print(f"Hand value: {self.count_hand()}. Cards: {self._hand}")
 
     def __repr__(self):
         return str(self._name)
@@ -42,8 +46,13 @@ class PlayerBase:
 
 class HumanPlayer(PlayerBase):
     def create(self):
-        self._name = input("What is your name?")
+        # todo get a name from player
+        self._name = "Robert Vari"
         return self
+
+    @property
+    def credits(self):
+        return self._credits
 
     def draw_cards(self, deck):
         print(f"This is your turn {self._name}")
@@ -51,7 +60,7 @@ class HumanPlayer(PlayerBase):
         while self.in_game:
             self.show_hand()
 
-            hand_value = self._count_hand()
+            hand_value = self.count_hand()
             if hand_value > 21:
                 self.in_game = False
                 print(f"Your hand value is to much: {hand_value}. You lost this round.")
@@ -138,8 +147,14 @@ if __name__ == '__main__':
 
     deck = Deck()
 
+    bet = 0
+
+    bet += ai_player.give_bet(10)
     ai_player.draw_cards(deck)
+
+    bet += human_player.give_bet(10)
     human_player.draw_cards(deck)
 
     ai_player.show_hand()
     human_player.show_hand()
+
