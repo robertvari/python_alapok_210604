@@ -15,6 +15,24 @@ class PlayerBase:
         self._name = fake.name()
         return self
 
+    def draw_cards(self, deck):
+        while self.in_game:
+            # check hand value
+            hand_value = self._count_hand()
+
+            if hand_value > 16:
+                self.in_game = False
+                print(f"{self._name} passes...")
+            else:
+                new_card = deck.give_card()
+                self._hand.append(new_card)
+
+    def _count_hand(self):
+        return sum([card.value for card in self._hand])
+
+    def show_hand(self):
+        print(f"Hand value: {self._count_hand()}. Cards: {self._hand}")
+
     def __str__(self):
         return f"Name: {self._name}\nCredits: {self._credits}"
 
@@ -26,6 +44,28 @@ class HumanPlayer(PlayerBase):
     def create(self):
         self._name = input("What is your name?")
         return self
+
+    def draw_cards(self, deck):
+        print(f"This is your turn {self._name}")
+
+        while self.in_game:
+            self.show_hand()
+
+            hand_value = self._count_hand()
+            if hand_value > 21:
+                self.in_game = False
+                print(f"Your hand value is to much: {hand_value}. You lost this round.")
+                break
+
+            player_input = input("Do you want to draw a card?(y/n)")
+            if player_input == "y":
+                new_card = deck.give_card()
+                print(f"The new card is: {new_card}")
+
+                self._hand.append(new_card)
+            else:
+                print("You passed")
+                self.in_game = False
 
 
 class AIPlayer(PlayerBase):
@@ -68,6 +108,11 @@ class Deck:
 
         random.shuffle(self.cards)
 
+    def give_card(self):
+        current_card = self.cards[-1]
+        self.cards.remove(current_card)
+        return current_card
+
 
 class Card:
     def __init__(self, name, value):
@@ -88,11 +133,13 @@ class Card:
 
 
 if __name__ == '__main__':
-    ai_player1 = AIPlayer().create()
-    ai_player2 = AIPlayer().create()
-
+    ai_player = AIPlayer().create()
     human_player = HumanPlayer().create()
 
-    print(ai_player1)
-    print(ai_player2)
-    print(human_player)
+    deck = Deck()
+
+    ai_player.draw_cards(deck)
+    human_player.draw_cards(deck)
+
+    ai_player.show_hand()
+    human_player.show_hand()
