@@ -1,3 +1,6 @@
+import random
+
+
 class PlayerBase:
     pass
 
@@ -36,6 +39,16 @@ class Deck:
 
         names = ["Heart", "Club", "Diamond", "Spade"]
 
+        for name in names:
+            for card in cards:
+                card_name = f"{name} {card[0]}"
+                value = card[1]
+
+                new_card = Card(name, value)
+                self.cards.append(new_card)
+
+        random.shuffle(self.cards)
+
 
 class Card:
     def __init__(self, name, value):
@@ -56,7 +69,8 @@ class Card:
 
 
 if __name__ == '__main__':
-    card1 = Card("Spade", 2)
-    card1.value = 11
+    deck = Deck()
+    print(deck.cards)
 
-    print(card1)
+    deck.create()
+    print(deck.cards)
