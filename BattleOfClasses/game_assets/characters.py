@@ -51,6 +51,25 @@ class CharacterBase:
     def report(self):
         print(f"Name: {self._name}\nRace: {self._race}\nStrength: {self._strength}\nGolds: {self._golds}")
 
+    @property
+    def race(self):
+        return self._race
+
+    def attack(self, other):
+        attack_strength = random.randint(0, self._strength)
+
+        if attack_strength == 0:
+            print(f"{self._name} misses {other}")
+        else:
+            other.set_current_HP(attack_strength)
+
+    def set_current_HP(self, value):
+        self._current_HP -= value
+
+    @property
+    def is_alive(self):
+        return self._current_HP > 0
+
     def __repr__(self):
         return self._name
 
@@ -58,6 +77,14 @@ class CharacterBase:
 class Player(CharacterBase):
     def create(self):
         self._name = "Robert"
+        self._race = "human"
+
+        # todo check player race
+
+        self._max_HP = self.races[self._race]["max_HP"]
+        self._current_HP = self._max_HP
+        self._strength = self.races[self._race]["strength"]
+
         return self
 
 
@@ -72,4 +99,4 @@ if __name__ == '__main__':
 
     player = Player().create()
 
-    enemy1.report()
+    player.report()
