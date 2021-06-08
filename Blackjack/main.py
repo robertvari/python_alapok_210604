@@ -7,9 +7,8 @@ class Blackjack:
 
         self._deck = Deck()
 
-        self.AI_Player = AIPlayer()
-        self.Human_Player = HumanPlayer()
-
+        self.AI_Player = AIPlayer().create()
+        self.Human_Player = HumanPlayer().create()
 
     @staticmethod
     def _intro():

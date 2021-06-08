@@ -1,4 +1,7 @@
 import random
+from faker import Faker
+
+fake = Faker()
 
 
 class PlayerBase:
@@ -9,11 +12,20 @@ class PlayerBase:
         self.in_game = True
 
     def create(self):
-        self._name = "..."
+        self._name = fake.name()
+        return self
+
+    def __str__(self):
+        return f"Name: {self._name}\nCredits: {self._credits}"
+
+    def __repr__(self):
+        return str(self._name)
 
 
 class HumanPlayer(PlayerBase):
-    pass
+    def create(self):
+        self._name = input("What is your name?")
+        return self
 
 
 class AIPlayer(PlayerBase):
@@ -76,8 +88,11 @@ class Card:
 
 
 if __name__ == '__main__':
-    deck = Deck()
-    print(deck.cards)
+    ai_player1 = AIPlayer().create()
+    ai_player2 = AIPlayer().create()
 
-    deck.create()
-    print(deck.cards)
+    human_player = HumanPlayer().create()
+
+    print(ai_player1)
+    print(ai_player2)
+    print(human_player)
